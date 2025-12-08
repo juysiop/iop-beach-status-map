@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Isle of Palms Beach Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    html, body, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <script>
+    // Center map on Isle of Palms
+    const map = L.map('map').setView([32.8024, -79.7600], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    // --- SAMPLE COLORED SEGMENTS ---
+    const segments = [
+      {
+        coords: [
+          [32.8026, -79.7810],
+          [32.8030, -79.7720]
+        ],
+        color: "green",
+        label: "Open / No Impact"
+      },
+      {
+        coords: [
+          [32.8030, -79.7720],
+          [32.8040, -79.7650]
+        ],
+        color: "yellow",
+        label: "Equipment Nearby / Use Caution"
+      },
+      {
+        coords: [
+          [32.8040, -79.7650],
+          [32.8050, -79.7580]
+        ],
+        color: "red",
+        label: "Beach Closed Due to Renourishment"
+      }
+    ];
+
+    segments.forEach(seg => {
+      L.polyline(seg.coords, { color: seg.color, weight: 6 }).addTo(map)
+        .bindPopup(seg.label);
+    });
+  </script>
+</body>
+</html>
