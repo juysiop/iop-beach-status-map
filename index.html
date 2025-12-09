@@ -70,7 +70,7 @@
     ];
 
     segments.forEach(seg => {
-      L.polyline(seg.coords, { color: seg.color, weight: 6 }).addTo(map)
+      L.polyline(seg.coords, { color: seg.color, weight: 10 }).addTo(map)
         .bindPopup(seg.label);
     });
   </script>
