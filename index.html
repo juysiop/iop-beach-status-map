@@ -29,7 +29,7 @@
     }).addTo(map);
 
     // --- SAMPLE COLORED SEGMENTS ---
-    const segments = [
+    const segments = [<!-- 
       {
         coords: [
           [32.77641, -79.81111],
@@ -67,7 +67,7 @@
       },
 
       
-    ];
+    -->];
 
     segments.forEach(seg => {
       L.polyline(seg.coords, { color: seg.color, weight: 10 }).addTo(map)
