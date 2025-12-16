@@ -1,18 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <title>Isle of Palms Beach Status</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
 
   <style>
-    html, body, #map {
+    html, body {
       height: 100%;
       margin: 0;
       padding: 0;
+    }
+
+    #map {
+      height: 100%;
+      width: 100%;
     }
   </style>
 </head>
@@ -21,58 +34,64 @@
   <div id="map"></div>
 
   <script>
-    // Center map on Isle of Palms
+    // Initialize map centered on Isle of Palms
     const map = L.map('map').setView([32.8024, -79.7600], 14);
 
+    // OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // --- SAMPLE COLORED SEGMENTS ---
-    const segments = [<!-- 
+/*
+    // Beach status segments
+    const segments = [
       {
         coords: [
           [32.77641, -79.81111],
           [32.77515, -79.81051],
-	  [32.77518, -79.80761],
-	  [32.77638, -79.80451],
-	  [32.78096, -79.79513],
-	  [32.78453, -79.78739]
+          [32.77518, -79.80761],
+          [32.77638, -79.80451],
+          [32.78096, -79.79513],
+          [32.78453, -79.78739]
         ],
-        color: "Yellow",
+        color: "yellow",
         label: "Proceed with caution: dredging pipe"
       },
-
       {
         coords: [
           [32.78453, -79.78739],
           [32.79288, -79.76621],
-	  [32.79650, -79.75603],
-	  [32.79897, -79.74444],
-	  [32.80107, -79.73796],
-	  [32.80543, -79.72567],
-	  [32.81063, -79.72143]
+          [32.79650, -79.75603],
+          [32.79897, -79.74444],
+          [32.80107, -79.73796],
+          [32.80543, -79.72567],
+          [32.81063, -79.72143]
         ],
-        color: "Green",
+        color: "green",
         label: "Open"
       },
-
       {
         coords: [
           [32.81063, -79.72143],
           [32.81445, -79.71861]
         ],
-        color: "Red",
+        color: "red",
         label: "Under construction"
-      },
+      }
+    ];
 
-      
-    -->];
-
+    // Draw segments on map
     segments.forEach(seg => {
-      L.polyline(seg.coords, { color: seg.color, weight: 10 }).addTo(map)
-        .bindPopup(seg.label);
+      L.polyline(seg.coords, {
+        color: seg.color,
+        weight: 10,
+        opacity: 0.9
+      })
+      .addTo(map)
+      .bindPopup(seg.label);
     });
+*/
   </script>
 </body>
 </html>
