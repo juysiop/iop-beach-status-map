@@ -102,6 +102,31 @@
         opacity: 0.9
       }).addTo(map).bindPopup(seg.label);
     });
+
+// LEGEND / KEY
+const legend = L.control({ position: 'bottomright' });
+
+legend.onAdd = function () {
+  const div = L.DomUtil.create('div', 'info legend');
+  div.style.background = 'white';
+  div.style.padding = '8px 10px';
+  div.style.borderRadius = '6px';
+  div.style.boxShadow = '0 0 6px rgba(0,0,0,0.3)';
+  div.style.fontSize = '13px';
+
+  div.innerHTML = `
+    <strong>Beach Projects</strong><br>
+    <span style="color: orange; font-weight: bold;">■</span> Ahtna USACE Project: Now - Mar 2026<br>
+    <span style="color: green; font-weight: bold;">■</span> Cottrell USACE Project: Jan - Mar 2026<br>
+    <span style="color: blue; font-weight: bold;">■</span> IOP Beach Restoration: Mar 2026 -
+  `;
+
+  return div;
+};
+
+legend.addTo(map);
+
+
   </script>
 </body>
 </html>
