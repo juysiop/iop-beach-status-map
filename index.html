@@ -5,24 +5,14 @@
   <title>Isle of Palms Beach Status</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
-  <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-  </script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
     html, body {
       height: 100%;
       margin: 0;
-      padding: 0;
     }
-
     #map {
       height: 100%;
       width: 100%;
@@ -34,17 +24,21 @@
   <div id="map"></div>
 
   <script>
-    // Initialize map centered on Isle of Palms
     const map = L.map('map').setView([32.8024, -79.7600], 14);
 
-    // OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-/*
-    // Beach status segments
+    // ✅ CLICK FOR COORDINATES
+    map.on('click', function (e) {
+      alert(
+        'Lat: ' + e.latlng.lat.toFixed(5) +
+        '\nLng: ' + e.latlng.lng.toFixed(5)
+      );
+    });
+
     const segments = [
       {
         coords: [
@@ -53,45 +47,61 @@
           [32.77518, -79.80761],
           [32.77638, -79.80451],
           [32.78096, -79.79513],
-          [32.78453, -79.78739]
+          [32.78516, -79.78611]
         ],
-        color: "yellow",
-        label: "Proceed with caution: dredging pipe"
+        color: "Orange",
+        label: "Ahtna's USACE Project"
       },
+
       {
         coords: [
-          [32.78453, -79.78739],
-          [32.79288, -79.76621],
-          [32.79650, -79.75603],
-          [32.79897, -79.74444],
-          [32.80107, -79.73796],
-          [32.80543, -79.72567],
-          [32.81063, -79.72143]
+          [32.77598, -79.81121],
+          [32.77431, -79.81038],
+          [32.77449, -79.80734],
+          [32.77539, -79.80479],
+          [32.78478, -79.78585]
         ],
-        color: "green",
-        label: "Open"
+        color: "Blue",
+        label: "IOP Beach Restoration Project Reach 3"
       },
+
       {
         coords: [
-          [32.81063, -79.72143],
-          [32.81445, -79.71861]
+          [32.80108, -79.73891],
+          [32.80294, -79.73196],
+          [32.80513, -79.72736]
         ],
-        color: "red",
-        label: "Under construction"
-      }
+        color: "Blue",
+        label: "IOP Beach Restoration Project Reach 2"
+      },
+
+      {
+        coords: [
+          [32.80676, -79.72461],
+          [32.81226, -79.71901],
+          [32.81501, -79.71781]
+        ],
+        color: "Blue",
+        label: "IOP Beach Restoration Project Reach 1"
+      },
+
+      {
+        coords: [
+          [32.77933, -79.79753],
+          [32.78228, -79.79139]
+        ],
+        color: "Green",
+        label: "Cottrell's USACE Project"
+      },
     ];
 
-    // Draw segments on map
     segments.forEach(seg => {
       L.polyline(seg.coords, {
         color: seg.color,
         weight: 10,
         opacity: 0.9
-      })
-      .addTo(map)
-      .bindPopup(seg.label);
+      }).addTo(map).bindPopup(seg.label);
     });
-*/
   </script>
 </body>
 </html>
