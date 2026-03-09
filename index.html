@@ -40,18 +40,6 @@
     });
 
     const segments = [
-      {
-        coords: [
-          [32.77641, -79.81111],
-          [32.77515, -79.81051],
-          [32.77518, -79.80761],
-          [32.77638, -79.80451],
-          [32.78096, -79.79513],
-          [32.78516, -79.78611]
-        ],
-        color: "Orange",
-        label: "Ahtna's USACE Project"
-      },
 
       {
         coords: [
@@ -61,7 +49,7 @@
           [32.77539, -79.80479],
           [32.78478, -79.78585]
         ],
-        color: "Blue",
+        color: "DarkBlue",
         label: "IOP Beach Restoration Project Reach 3"
       },
 
@@ -81,18 +69,11 @@
           [32.81226, -79.71901],
           [32.81501, -79.71781]
         ],
-        color: "Blue",
+        color: "DeepSkyBlue",
         label: "IOP Beach Restoration Project Reach 1"
       },
 
-      {
-        coords: [
-          [32.77933, -79.79753],
-          [32.78228, -79.79139]
-        ],
-        color: "Green",
-        label: "Cottrell's USACE Project"
-      },
+
     ];
 
     segments.forEach(seg => {
@@ -115,10 +96,11 @@ legend.onAdd = function () {
   div.style.fontSize = '13px';
 
   div.innerHTML = `
-    <strong>Beach Projects</strong><br>
-    <span style="color: orange; font-weight: bold;">■</span> Ahtna USACE Project: Now - Mar 2026<br>
-    <span style="color: green; font-weight: bold;">■</span> Cottrell USACE Project: Jan - Mar 2026<br>
-    <span style="color: blue; font-weight: bold;">■</span> IOP Beach Restoration: May - Sept 2026 
+    <strong>Beach Projects: May - Sept 2026</strong><br>
+    <span style="color: DeepSkyBlue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 1<br>
+    <span style="color: blue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 2<br>
+    <span style="color: DarkBlue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 3
+
   `;
 
   return div;
