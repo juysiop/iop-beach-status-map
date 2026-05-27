@@ -4,28 +4,28 @@
   <meta charset="utf-8" />
   <title>Isle of Palms Beach Status</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-    #map {
-      height: 100%;
-      width: 100%;
+    html, body { height: 100%; margin: 0; }
+    #map { height: 100%; width: 100%; }
+    .hotel-label {
+      background: rgba(255,255,255,0.85);
+      border: 1px solid #555;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #222;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
     }
   </style>
 </head>
-
 <body>
   <div id="map"></div>
-
   <script>
     const map = L.map('map').setView([32.8024, -79.7600], 13);
-
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
@@ -39,76 +39,212 @@
       );
     });
 
-    const segments = [
+    /*
+      POLYGON SYNTAX GUIDE
+      ─────────────────────────────────────────────────────────────────────
+      Each reach is defined as a polygon with two "rows" of coordinates:
 
+        landwardEdge  — the existing shoreline/berm line (your original coords)
+        seawardEdge   — the ocean-side boundary of the fill area
+                        (currently ESTIMATED ~0.0010–0.0015° seaward;
+                         replace these with your real surveyed coords)
+
+      The polygon is assembled by:
+        1. Walking the landward edge front-to-back
+        2. Appending the seaward edge back-to-front  (closes the shape)
+
+      To update a reach:
+        - Edit the seawardEdge array with your real coordinates.
+        - You can have a different number of seaward points than landward
+          points — just make sure the first/last seaward points align
+          roughly with the first/last landward points so the polygon closes
+          cleanly.
+      ─────────────────────────────────────────────────────────────────────
+    */
+
+    const reaches = [
       {
-        coords: [
+        label: "IOP Beach Restoration Project Reach 3",
+        color: "DarkBlue",
+        landwardEdge: [
           [32.77598, -79.81121],
           [32.77431, -79.81038],
           [32.77449, -79.80734],
           [32.77539, -79.80479],
-          [32.78478, -79.78585]
+          [32.78548, -79.78548]
         ],
-        color: "DarkBlue",
-        label: "IOP Beach Restoration Project Reach 3"
+        seawardEdge: [
+          [32.77610, -79.81210],   // ← estimated
+          [32.77360, -79.81120],   // ← estimated
+          [32.77360, -79.80810],   // ← estimated
+          [32.78037, -79.79304],   // ← estimated
+          [32.78478, -79.78585]    // ← estimated
+        ]
       },
-
       {
-        coords: [
+        label: "IOP Beach Restoration Project Reach 2",
+        color: "Blue",
+        landwardEdge: [
           [32.80108, -79.73891],
           [32.80294, -79.73196],
           [32.80513, -79.72736]
         ],
-        color: "Blue",
-        label: "IOP Beach Restoration Project Reach 2"
+        seawardEdge: [
+          [32.80039, -79.73718],   // ← estimated
+          [32.80185, -79.73165],   // ← estimated
+          [32.80439, -79.72720]    // ← estimated
+        ]
       },
-
       {
-        coords: [
+        label: "IOP Beach Restoration Project Reach 1",
+        color: "DeepSkyBlue",
+        landwardEdge: [
           [32.80676, -79.72461],
           [32.81226, -79.71901],
-          [32.81501, -79.71781]
+          [32.81611, -79.71791]
         ],
-        color: "DeepSkyBlue",
-        label: "IOP Beach Restoration Project Reach 1"
-      },
-
-
+        seawardEdge: [
+          [32.80690, -79.72265],   // ← estimated
+          [32.81022, -79.71877],   // ← estimated
+          [32.81501, -79.71781],    // ← estimated
+        ]
+      }
     ];
 
-    segments.forEach(seg => {
-      L.polyline(seg.coords, {
-        color: seg.color,
-        weight: 10,
+    reaches.forEach(reach => {
+      const polygonCoords = [
+        ...reach.landwardEdge,
+        ...[...reach.seawardEdge].reverse()
+      ];
+      L.polygon(polygonCoords, {
+        color: reach.color,
+        fillColor: reach.color,
+        fillOpacity: 0.35,
+        weight: 2,
         opacity: 0.9
-      }).addTo(map).bindPopup(seg.label);
+      }).addTo(map).bindPopup(reach.label);
     });
 
-// LEGEND / KEY
-const legend = L.control({ position: 'bottomright' });
+    /*
+      HOTEL MARKERS
+      ─────────────────────────────────────────────────────────────────────
+      Each hotel has:
+        name    — label shown permanently on the map
+        coords  — [lat, lng]  (click the map to find coordinates)
+        reach   — which restoration reach is nearby (for reference)
 
-legend.onAdd = function () {
-  const div = L.DomUtil.create('div', 'info legend');
-  div.style.background = 'white';
-  div.style.padding = '8px 10px';
-  div.style.borderRadius = '6px';
-  div.style.boxShadow = '0 0 6px rgba(0,0,0,0.3)';
-  div.style.fontSize = '13px';
+      The tooltip is set to permanent: true so the name is always visible.
+      The popup (on click) shows the name + reach association.
+      ─────────────────────────────────────────────────────────────────────
+    */
 
-  div.innerHTML = `
-    <strong>Beach Projects: June - Sept 2026</strong><br>
-    <span style="color: DeepSkyBlue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 1<br>
-    <span style="color: blue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 2<br>
-    <span style="color: DarkBlue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 3
+    const hotels = [
+      // ── Reach 3 area ──────────────────────────────────────────────────
+      {
+        name: "Ocean Club",
+        coords: [32.81333, -79.72016],
+        reach: "Reach 3"
+      },
+      {
+        name: "Seascape",
+        coords: [32.81197, -79.72108],
+        reach: "Reach 3"
+      },
+      {
+        name: "Summer House",
+        coords: [32.81005, -79.72312],
+        reach: "Reach 3"
+      },
+      {
+        name: "Port O'Call",
+        coords: [32.81138, -79.72227],
+        reach: "Reach 3"
+      },
+      {
+        name: "Mariner's Walk",
+        coords: [32.80757, -79.72572],
+        reach: "Reach 3"
+      },
+      {
+        name: "Shipwatch Villas",
+        coords: [32.80903, -79.72502],
+        reach: "Reach 3"
+      },
+      // ── Reach 2 area ──────────────────────────────────────────────────
+      {
+        name: "Boardwalk Inn",
+        coords: [32.80234, -79.73767],
+        reach: "Reach 2"
+      },
+      {
+        name: "Beach Club",
+        coords: [32.80512, -79.72918],
+        reach: "Reach 2"
+      },
+      // ── Reach 1 area ──────────────────────────────────────────────────
+      {
+        name: "Sea Cabins",
+        coords: [32.78561, -79.78678],
+        reach: "Reach 1"
+      },
+      {
+        name: "Palm Hotel",
+        coords: [32.78492, -79.78866],
+        reach: "Reach 1"
+      },
+      {
+        name: "Seaside Inn",
+        coords: [32.78455, -79.78973],
+        reach: "Reach 1"
+      },
+    ];
 
-  `;
+    // Custom small hotel icon
+    const hotelIcon = L.divIcon({
+      className: '',
+      html: `<div style="
+        width: 10px; height: 10px;
+        background: #e63946;
+        border: 2px solid white;
+        border-radius: 50%;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      "></div>`,
+      iconSize: [10, 10],
+      iconAnchor: [5, 5]
+    });
 
-  return div;
-};
+    hotels.forEach(hotel => {
+      L.marker(hotel.coords, { icon: hotelIcon })
+        .addTo(map)
+        .bindTooltip(hotel.name, {
+          permanent: true,
+          direction: 'top',
+          offset: [0, -6],
+          className: 'hotel-label'
+        })
+        .bindPopup(`<strong>${hotel.name}</strong><br>Near: ${hotel.reach}`);
+    });
 
-legend.addTo(map);
-
-
+    // LEGEND / KEY
+    const legend = L.control({ position: 'bottomright' });
+    legend.onAdd = function () {
+      const div = L.DomUtil.create('div', 'info legend');
+      div.style.background = 'white';
+      div.style.padding = '8px 10px';
+      div.style.borderRadius = '6px';
+      div.style.boxShadow = '0 0 6px rgba(0,0,0,0.3)';
+      div.style.fontSize = '13px';
+      div.innerHTML = `
+        <strong>Beach Projects: June – Sept 2026</strong><br>
+        <span style="color: DeepSkyBlue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 1<br>
+        <span style="color: blue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 2<br>
+        <span style="color: DarkBlue; font-weight: bold;">■</span> IOP Beach Restoration: Reach 3<br>
+        <hr style="margin: 5px 0;">
+        <span style="color: #e63946; font-weight: bold;">●</span> Affected Hotel / Resort
+      `;
+      return div;
+    };
+    legend.addTo(map);
   </script>
 </body>
 </html>
