@@ -95,7 +95,25 @@
     .popup-title { font-weight: 900; color: var(--navy); font-size: 15px; margin-bottom: 4px; }
     .popup-note { color:#456; line-height: 1.35; }
     .legend {
-      background: var(--paper); padding: 10px 12px; border-radius: 14px; box-shadow: var(--shadow); font-size: 13px; line-height: 1.45;
+      background: var(--paper);
+      padding: 12px 14px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      line-height: 1.5;
+      min-width: 190px;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      white-space: nowrap;
+    }
+    .legend-icon {
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
     }
     .legend strong { color: var(--navy); }
     .swatch { display:inline-block; width: 13px; height: 13px; border-radius: 4px; margin-right: 6px; vertical-align: -2px; }
@@ -310,14 +328,39 @@
 const legend = L.control({ position: 'bottomright' });
     legend.onAdd = function () {
       const div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = `<strong>Map key</strong><br>
-        <span class="swatch" style="background:#06d6a0"></span>Reach 1<br>
-        <span class="swatch" style="background:#118ab2"></span>Reach 2<br>
-        <span class="swatch" style="background:#073b4c"></span>Reach 3<br>
-        <span class="swatch" style="background:rgba(7,59,76,.55)"></span>Completed work area<br>
-        🚜 Current work location<br>
-        <span style="color:#ef476f;font-weight:900">●</span> Hotel / resort label<br>
-        `;
+      div.innerHTML = `
+        <strong>Map Key</strong>
+
+        <div class="legend-row">
+          <span class="swatch" style="background:rgba(6,214,160,.16); border:3px solid #06d6a0"></span>
+          <span>Reach 1</span>
+        </div>
+
+        <div class="legend-row">
+          <span class="swatch" style="background:rgba(17,138,178,.16); border:3px solid #118ab2"></span>
+          <span>Reach 2</span>
+        </div>
+
+        <div class="legend-row">
+          <span class="swatch" style="background:rgba(7,59,76,.16); border:3px solid #073b4c"></span>
+          <span>Reach 3</span>
+        </div>
+
+        <div class="legend-row">
+          <span class="swatch" style="background:rgba(7,59,76,.55)"></span>
+          <span>Completed Work Area</span>
+        </div>
+
+        <div class="legend-row">
+          <span class="legend-icon">🚜</span>
+          <span>Current Work Location</span>
+        </div>
+
+        <div class="legend-row">
+          <span class="legend-icon" style="color:#ef476f;font-weight:900">●</span>
+          <span>Hotel / Resort</span>
+        </div>
+      `;
       return div;
     };
 
