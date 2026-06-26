@@ -1,11 +1,38 @@
 <html>
-  <head>
+<head>
     <script type="module" src="https://js.arcgis.com/5.1/embeddable-components/"></script>
-  </head>
-  
-  <body>
-    <arcgis-embedded-map style="height:600px;width:700px;" item-id="a21cf93379e24254be6f18b715b30887" theme="light" time-zone-label-enabled center="-79.765331,32.792201999999996"scale="36111.909643" portal-url="https://iopbuilding.maps.arcgis.com"></arcgis-embedded-map>
-  </body>
-</html>
 
-<!-- Add script to the <head> of your page to load the embeddable map component --><!-- Add custom element to <body> of your page --> 
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        arcgis-embedded-map {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="map">
+    <arcgis-embedded-map
+        item-id="a21cf93379e24254be6f18b715b30887"
+        theme="light"
+        portal-url="https://iopbuilding.maps.arcgis.com"
+        center="-79.765331,32.792202"
+        scale="36111.909643"
+        time-zone-label-enabled>
+    </arcgis-embedded-map>
+</div>
+
+</body>
+</html>
